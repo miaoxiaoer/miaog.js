@@ -3,7 +3,6 @@ const _ = require('lodash');
 const PointClass = require('./point_class.js');
 const SizeClass = require('./size_class.js');
 const RectangleClass = require('./rectangle_class.js');
-const RectangleClass = require('./rectangle_class.js');
 //环形类
 class AnnularClass {
   constructor() {

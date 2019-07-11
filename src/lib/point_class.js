@@ -19,7 +19,7 @@ class PointClass {
     }
     let idX = (ep.X - this.X) * (ep.X - this.X);
     let idY = (ep.Y - this.Y) * (ep.Y - this.Y);
-    let idP = (idX + idY);
+    let idP = idX + idY;
     let idC = ec * ec;
     if ((ep.X == this.X) && (ep.Y == this.Y)) {
       return true;
@@ -35,10 +35,10 @@ class PointClass {
     if (ec === undefined) {
       ec = 1.0;
     }
-    let idX = (ep.X - this.X) * (ep.X - this.X);
-    let idY = (ep.Y - this.Y) * (ep.Y - this.Y);
-    let idP = (idX + idY);
-    let idC = ec * ec;
+    let idX = Common.accMul(Common.accSub(ep.X, this.X), Common.accSub(ep.X, this.X));
+    let idY = Common.accMul(Common.accSub(ep.Y, this.Y), Common.accSub(ep.Y, this.Y));
+    let idP = Common.accAdd(idX, idY);
+    let idC = Common.accMul(ec, ec);
     if ((ep.X == this.X) && (ep.Y == this.Y)) {
       return true;
     } else if (idP < idC) {
@@ -91,6 +91,7 @@ class PointClass {
   IsClass(e) {
     return e instanceof PointClass;
   }
+
   //位移，向量，在当前的点的位置上，加上另一个位置。参数类型：（miaosize）（miaopoint）（ew,eh）
   Translate() {
     if (!(_.isUndefined(arguments[0]))) {
@@ -205,6 +206,7 @@ class PointClass {
     }
     return this;
   }
+  //Floor方法返回小于等于当前数值的最大整数
   Floor() {
     this.X = Math.floor(this.X);
     this.Y = Math.floor(this.Y);
@@ -315,17 +317,27 @@ class PointClass {
     return this;
   }
 
-
+  //Random() 方法随机点，数值在0-1之间。
   Random() {
     this.X = parseFloat(Math.random().toFixed(this.FixedNumber));
     this.Y = parseFloat(Math.random().toFixed(this.FixedNumber));
     return this;
   }
+
+  //Rnd(emin, emax) 方法随机点，数值在emin, emax之间。
   Rnd(emin, emax) {
     this.X = parseFloat(Common.Rnd(emin, emax).toFixed(this.FixedNumber));
     this.Y = parseFloat(Common.Rnd(emin, emax).toFixed(this.FixedNumber));
     return this;
   }
+
+  //Rnd(eminw, emaxw, eminh, emaxh) 方法随机点，数值在eminw, emaxw, eminh, emaxh之间。
+  RndXY(eminx, emaxx, eminy, emaxy) {
+    this.X = parseFloat(Common.Rnd(eminx, emaxx).toFixed(this.FixedNumber));
+    this.Y = parseFloat(Common.Rnd(eminy, emaxy).toFixed(this.FixedNumber));
+    return this;
+  }
+
   //旋转坐标eAngle为角度(弧度制)，eOrgPoint是旋转的中点，如果不填，eOrgPoint为（0,0）坐标
   //角度为正顺时针旋转，角度为负逆时针旋转
   Rotate(eAngle, eOrgPoint) {
@@ -359,6 +371,7 @@ class PointClass {
     return this;
   }
 
+  //round() 方法可把一个数字舍入为最接近的整数。
   Round() {
     this.X = Math.round(this.X);
     this.Y = Math.round(this.Y);
@@ -410,7 +423,7 @@ class PointClass {
             this.Y = parseFloat(arguments[0].Y.toFixed(this.FixedNumber));
           }
         }
-        //3、（X坐标，Y坐标）
+        //4、（X坐标，Y坐标）
         //这个使用默认的精度
         if (_.isNumber(arguments[0])) {
           this.X = parseFloat(arguments[0].toFixed(this.FixedNumber));
@@ -471,7 +484,7 @@ class PointClass {
             }
           }
         }
-        //3、json参数(json包含FixedNumber，x，y属性，如果不包含则使用默认值)
+        //3、json参数(json包含FixedNumber，X，Y属性，如果不包含则使用默认值)
         if (Common.IsJson(arguments[0])) {
           if (!(_.isUndefined(arguments[0].FixedNumber))) {
             if (_.isNumber(arguments[0][0])) {
@@ -499,12 +512,21 @@ class PointClass {
     }
     return this;
   }
+
   //按照比例缩放
   Scale(eo) {
     this.X = this.X * eo;
     this.Y = this.Y * eo;
     return this;
   }
+
+  //按照比例缩放，精度算法效率低下
+  ScaleAcc(eo) {
+    this.X = Common.accMul(this.X , eo);
+    this.Y = Common.accMul(this.Y , eo);
+    return this;
+  }
+
   //将XY轴交换
   SwapXY() {
     let t = this.X;
@@ -523,8 +545,8 @@ class PointClass {
   //输出Size的Json对象
   ToSizeJson() {
     return {
-      'Width': this.Width,
-      'Height': this.Height,
+      'Width': math.Abs(this.X),
+      'Height': math.Abs(this.Y),
       'FixedNumber': this.FixedNumber
     };
   }

@@ -1,22 +1,21 @@
-//点类
-const Common = require('./common.js');
-const _ = require('lodash');
-const PointClass = require('./point_class.js');
-const SizeClass = require('./size_class.js');
-const RectangleClass = require('./rectangle_class.js');
-const CircleClass = require('./circle_class.js');
+//线类
+const Common = require('./common.js');//引入公共方法
+const _ = require('lodash');//引入lodash，许多数组操作需要用到这个库
+const PointClass = require('./point_class.js');//引入点类，因为一条线有两个点属性组成
+const SizeClass = require('./size_class.js');//引入size，将直线占用的size类型返回
+const RectangleClass = require('./rectangle_class.js');//引入矩形类，计算一条线段的外包图形返回这个类型
+const CircleClass = require('./circle_class.js');//引入圆形类，计算一条线段的圆形外包返回这个类型
 
 class LineClass {
   constructor() {
     // 属性
-    this.FixedNumber = MiaoCommonVar.FixedNumber;
+    this.FixedNumber = Common.FixedNumber;
     this.Point1 = new PointClass(0, 0, this.FixedNumber);
     this.Point2 = new PointClass(0, 0, this.FixedNumber);
     eval(Common.GetSetFunStr(arguments));
   }
   Set() {
     if (!(_.isUndefined(arguments[0]))) {
-
       if (arguments.length == 5) {
         if (_.isNumber(arguments[4])) {
           this.FixedNumber = arguments[4];
@@ -580,18 +579,18 @@ class LineClass {
           }
         }
         if (ifindxiangtongzhi == false) {
-          //console.info(Math.formatFloat(((eT2 - eT1) * 0.5) + eT1, MiaoCommonVar.FixedNumber));
+          //console.info(Math.formatFloat(((eT2 - eT1) * 0.5) + eT1, Common.FixedNumber));
           ePointArr.push({
             'X': iFengePoint.X,
             'Y': iFengePoint.Y,
-            'T': Math.formatFloat(((eT2 - eT1) * 0.5) + eT1, MiaoCommonVar.FixedNumber)
+            'T': Math.formatFloat(((eT2 - eT1) * 0.5) + eT1, Common.FixedNumber)
           });
         }
       } else {
         eUpL = eUpL - 1;
         if (eUpL > 0) {
-          ePointArr = MiaoCommonFun.JiaoDianDiguiPanbieL2Q(eLine, iCurve1, ePointArr, eUpL, eT1, Math.formatFloat(((eT2 - eT1) * 0.5) + eT1, MiaoCommonVar.FixedNumber));
-          ePointArr = MiaoCommonFun.JiaoDianDiguiPanbieL2Q(eLine, iCurve2, ePointArr, eUpL, Math.formatFloat(((eT2 - eT1) * 0.5) + eT1, MiaoCommonVar.FixedNumber), eT2);
+          ePointArr = MiaoCommonFun.JiaoDianDiguiPanbieL2Q(eLine, iCurve1, ePointArr, eUpL, eT1, Math.formatFloat(((eT2 - eT1) * 0.5) + eT1, Common.FixedNumber));
+          ePointArr = MiaoCommonFun.JiaoDianDiguiPanbieL2Q(eLine, iCurve2, ePointArr, eUpL, Math.formatFloat(((eT2 - eT1) * 0.5) + eT1, Common.FixedNumber), eT2);
         }
       }
     }
